@@ -71,6 +71,10 @@ h1 {
   cursor: pointer;
 }
 
+.card.fade:hover {
+  cursor: auto;
+}
+
 .scores {
   width: 50%;
   color: white;
