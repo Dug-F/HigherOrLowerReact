@@ -5,21 +5,21 @@ import Card from "./Card";
 const cardData = [];
 const activeCards = {};
 const initialCardStatus = {};
-["spades", "hearts", "diamonds", "clubs"].forEach((suit, suitIndex) => {
+["spades", "hearts", "diamonds", "clubs"].forEach((suit) => {
   const suitArray = [];
   ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"].forEach((rank, rankIndex) => {
     const rankNumber = rankIndex + 2;
+    const cardId = `${rank}${suit}`;
     suitArray.push({
+      id: cardId,
       suit: suit,
       rank: rank,
       rankNumber: rankNumber,
-      suitIndex: suitIndex,
-      rankIndex: rankIndex,
       img: `/${rank}${suit[0]}.png`,
       alt: `${rank} of ${suit}`,
     });
     activeCards.hasOwnProperty(rankNumber) ? (activeCards[rankNumber] += 1) : (activeCards[rankNumber] = 1);
-    initialCardStatus[`${rank}${suit}`] = { selected: false, inactive: false };
+    initialCardStatus[cardId] = { selected: false, inactive: false };
   });
   cardData.push(suitArray);
 });
@@ -37,22 +37,21 @@ export default function App() {
   const [runUpdateStats, setRunUpdateStats] = useState(true);
 
   // unselect the selected card and restore the previously selected card as the selected card
-  function deselectCard(rank, rankNumber, suit) {
+  function deselectCard(selectedCard) {
     // add selected card back to the total counts
     setCardCounts((prevCardCounts) => {
-      return { ...prevCardCounts, [rankNumber]: prevCardCounts[rankNumber] + 1 };
+      return { ...prevCardCounts, [selectedCard.rankNumber]: prevCardCounts[selectedCard.rankNumber] + 1 };
     });
 
     // get the previously selected card
     const prevSelectedCard = cardsSelected.length > 1 ? cardsSelected[cardsSelected.length - 2] : null;
 
     // update the status of the selected cards and (if any) the previously selected card
-    setCardStatus((prevCardStatus) => {
-      const newCardsStatus = { ...prevCardStatus, [`${rank}${suit}`]: { selected: false, inactive: false } };
+    setCardStatus(prevCardStatus => {
+      const newCardsStatus = { ...prevCardStatus, [selectedCard.id]: { selected: false, inactive: false } };
       // set status to re-select and re-activate the previously selected card, if any
       if (prevSelectedCard) {
-        const key = `${prevSelectedCard.rank}${prevSelectedCard.suit}`;
-        newCardsStatus[key] = { selected: true, inactive: false };
+        newCardsStatus[prevSelectedCard.id] = { selected: true, inactive: false };
       }
       return newCardsStatus;
     });
@@ -65,26 +64,25 @@ export default function App() {
   }
 
   // make the card clicked on the selected card
-  function selectCard(rank, rankNumber, suit) {
+  function selectCard(selectedCard) {
     // subtract selected card from the total counts
     setCardCounts((prevCardCounts) => {
-      return { ...prevCardCounts, [rankNumber]: prevCardCounts[rankNumber] - 1 };
+      return { ...prevCardCounts, [selectedCard.rankNumber]: prevCardCounts[selectedCard.rankNumber] - 1 };
     });
 
     // update the status of the selected cards and (if any) the previously selected card
     setCardStatus((prevCardStatus) => {
-      const newCardsStatus = { ...prevCardStatus, [`${rank}${suit}`]: { selected: true, inactive: false } };
+      const newCardsStatus = { ...prevCardStatus, [selectedCard.id]: { selected: true, inactive: false } };
       // set status to deselect and deactivate the previously selected card, if any
       if (cardsSelected.length > 0) {
         const lastSelected = cardsSelected[cardsSelected.length - 1];
-        const key = `${lastSelected.rank}${lastSelected.suit}`;
-        newCardsStatus[key] = { selected: false, inactive: true };
+        newCardsStatus[lastSelected.id] = { selected: false, inactive: true };
       }
       return newCardsStatus;
     });
 
     // add the selected card to the cards selected list
-    setCardsSelected((prevCardsSelected) => [...prevCardsSelected, { rank: rank, suit: suit, rankNumber: rankNumber }]);
+    setCardsSelected((prevCardsSelected) => [...prevCardsSelected, selectedCard]);
 
     // set the run update stats marker - stats have to run as a useEffect as the state updates in this function are asynchronous
     setRunUpdateStats(true);
@@ -93,7 +91,9 @@ export default function App() {
   // update the totals on what the probability stats are calculated
   function updateTotals(rankNumber) {
     // set stats to null to show no proabilities if no card is selected
-    if (rankNumber === null) {return setStats(null)};
+    if (rankNumber === null) {
+      return setStats(null);
+    }
 
     const totals = { higher: 0, lower: 0, equal: 0 };
 
@@ -114,21 +114,28 @@ export default function App() {
   useEffect(() => {
     // update stats - this has to run as a useEffect as the state updates in the selectCard and deselectCard functions are asynchronous
     setRunUpdateStats(false);
-    updateTotals(cardsSelected.length > 0 ? cardsSelected[cardsSelected.length - 1].rankNumber : null); }, [runUpdateStats]);
+    const showStats = cardsSelected.length > 0 && cardsSelected.length < 52;
+    updateTotals(showStats ? cardsSelected[cardsSelected.length - 1].rankNumber : null);
+  }, [runUpdateStats]);
 
-  // compose cards array with outer cards-container and innser suit-container (for grid/flexbox styling)
+  // compile an array containing a Card component for each card in the card array
+  function cardsInSuit(suit) {
+    return suit.map(card => {
+      return <Card key={`${card.rank}${card.suit}`} 
+                   cardData={card} 
+                   cardStatus={cardStatus[`${card.rank}${card.suit}`]} 
+                   selectCard={selectCard} 
+                   deselectCard={deselectCard} />;      
+    })
+  }
+
+  // compose cards array with outer cards-container and inner suit-container (for grid/flexbox styling)
   const cards = (
     <div className="cards-container">
       {cardData.map((suit) => {
         return (
           <div key={suit[0].suit} className="suit-container">
-            {suit.map((card) => {
-              return <Card key={`${card.rank}${card.suit}`} 
-                           cardData={card} 
-                           cardStatus={cardStatus[`${card.rank}${card.suit}`]} 
-                           selectCard={selectCard}
-                           deselectCard={deselectCard} />;
-            })}
+            {cardsInSuit(suit)};
           </div>
         );
       })}
@@ -143,4 +150,3 @@ export default function App() {
     </main>
   );
 }
-
