@@ -11,8 +11,9 @@ export default function Card(props) {
     
   }
 
-  const inactive = props.cardStatus.inactive ? "fade" : "";
-  const selected = props.cardStatus.selected ? "highlight" : "";
+  const inactive = props.cardData.inactive ? "fade" : "";
+  const selected = props.cardData.selected ? "highlight" : "";
+  console.log("card rendered, props.cardData: ", props.cardData);
 
   return <img className={`card ${inactive} ${selected}`}
               src={props.cardData.img} 

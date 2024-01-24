@@ -4,22 +4,25 @@ import Card from "./Card";
 
 const cardData = [];
 const activeCards = {};
-const initialCardStatus = {};
+const cards = {};
 ["spades", "hearts", "diamonds", "clubs"].forEach((suit) => {
   const suitArray = [];
   ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"].forEach((rank, rankIndex) => {
     const rankNumber = rankIndex + 2;
-    const cardId = `${rank}${suit}`;
+    const cardId = `${rank}${suit[0]}`;
     suitArray.push({
-      id: cardId,
-      suit: suit,
-      rank: rank,
-      rankNumber: rankNumber,
-      img: `/${rank}${suit[0]}.png`,
-      alt: `${rank} of ${suit}`,
+      id: cardId
     });
+    cards[cardId] = {
+        suit: suit,
+        rank: rank,
+        rankNumber: rankNumber,
+        img: `/${rank}${suit[0]}.png`,
+        alt: `${rank} of ${suit}`,
+        selected: false,
+        inactive: false
+      };
     activeCards.hasOwnProperty(rankNumber) ? (activeCards[rankNumber] += 1) : (activeCards[rankNumber] = 1);
-    initialCardStatus[cardId] = { selected: false, inactive: false };
   });
   cardData.push(suitArray);
 });
@@ -29,8 +32,6 @@ export default function App() {
   const [cardCounts, setCardCounts] = useState(activeCards);
   // re-calculated when new card is selected/deselected and contains higher/lower/equal count for selected card
   const [stats, setStats] = useState({});
-  // used to track selected and inactive status of each card
-  const [cardStatus, setCardStatus] = useState(initialCardStatus);
   // keeps the history of selected cards (last entry is removed when a card is de-selected)
   const [cardsSelected, setCardsSelected] = useState([]);
   // marker to control when the updateTotals useEffect function runs
@@ -121,20 +122,19 @@ export default function App() {
   // compile an array containing a Card component for each card in the card array
   function cardsInSuit(suit) {
     return suit.map(card => {
-      return <Card key={`${card.rank}${card.suit}`} 
-                   cardData={card} 
-                   cardStatus={cardStatus[`${card.rank}${card.suit}`]} 
+      return <Card key={`${card.id}`} 
+                   cardData={cards[card.id]} 
                    selectCard={selectCard} 
                    deselectCard={deselectCard} />;      
     })
   }
 
   // compose cards array with outer cards-container and inner suit-container (for grid/flexbox styling)
-  const cards = (
+  const cardsArray = (
     <div className="cards-container">
       {cardData.map((suit) => {
         return (
-          <div key={suit[0].suit} className="suit-container">
+          <div key={suit[0].id} className="suit-container">
             {cardsInSuit(suit)};
           </div>
         );
@@ -145,7 +145,7 @@ export default function App() {
   return (
     <main className="outer-container">
       <h1>Higher or Lower</h1>
-      {cards}
+      {cardsArray}
       <Scores stats={stats} />
     </main>
   );
