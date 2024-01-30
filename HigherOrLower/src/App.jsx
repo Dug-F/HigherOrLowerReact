@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import Scores from "./Scores";
 import Card from "./Card";
 
@@ -11,96 +11,115 @@ const cards = {};
     const rankNumber = rankIndex + 2;
     const cardId = `${rank}${suit[0]}`;
     suitArray.push({
-      id: cardId
+      id: cardId,
     });
     cards[cardId] = {
-        suit: suit,
-        rank: rank,
-        rankNumber: rankNumber,
-        img: `/${rank}${suit[0]}.png`,
-        alt: `${rank} of ${suit}`,
-        selected: false,
-        inactive: false
-      };
-    activeCards.hasOwnProperty(rankNumber) ? (activeCards[rankNumber] += 1) : (activeCards[rankNumber] = 1);
+      id: cardId,
+      suit: suit,
+      rank: rank,
+      rankNumber: rankNumber,
+      img: `/${rank}${suit[0]}.png`,
+      alt: `${rank} of ${suit}`,
+      selected: false,
+      inactive: false,
+    };
+    rankNumber in activeCards ? (activeCards[rankNumber] += 1) : (activeCards[rankNumber] = 1);
   });
   cardData.push(suitArray);
 });
 
+// styling attributes for cards
+const selected = {selected: true, inactive: false};
+const inactive = {selected: false, inactive: true};
+const normal = {selected: false, inactive: false};
+
+function cardClick(state, action) {
+  // console.log("state on entering cardClick: ", state);
+  let updatedCards = { ...state.cards };
+  let updatedCardCounts = { ...state.cardCounts };
+  let updatedSelectedIds = [...state.selectedIds];
+  let cardsToUpdate = [];
+  let prevSelectedId;
+
+  switch (action.type) {
+    case "select":
+      prevSelectedId = updatedSelectedIds.at(-1);
+      // set styling props for selected and previously selected (if any) cards
+      cardsToUpdate.push({ id: action.id, status: selected });
+      if (prevSelectedId) cardsToUpdate.push({ id: prevSelectedId, status: inactive });
+      updatedCards = updateCards(updatedCards, cardsToUpdate);
+      // decrement active card count for selected card
+      updatedCardCounts = updateCardCounts(updatedCardCounts, updatedCards[action.id].rankNumber, -1);
+      // add selected card to selected cards sequence array
+      updatedSelectedIds.push(action.id);
+      break;
+    case "deselect":
+      // previously selected card was the one before the currently selected card in the selected card sequence
+      prevSelectedId = updatedSelectedIds.at(-2);
+      // set styling props for selected and previously selected (if any) cards
+      cardsToUpdate.push({ id: action.id, status: normal });
+      if (prevSelectedId) cardsToUpdate.push({ id: prevSelectedId, status: selected });
+      updatedCards = updateCards(updatedCards, cardsToUpdate);
+      // increment active card count for selected card
+      updatedCardCounts = updateCardCounts(updatedCardCounts, updatedCards[action.id].rankNumber, 1);
+      // remove selected card from selected cards sequence array
+      updatedSelectedIds.pop();
+      break;
+    default:
+      return state;
+  }
+
+  return { ...state, cards: updatedCards, cardCounts: updatedCardCounts, selectedIds: updatedSelectedIds };
+}
+
+/**
+ * Update selected and inactive props in updatedCards state for cards passed in cardsToUpdate
+ * @param {{}} updatedCards - copy of state cards object
+ * @param {[{id: int, status: {selected: boolean, inactive: boolean}}]} cardsToUpdate - array of object defining ids of cards to update and the props values
+ * @returns updated copy of state cards object
+ */
+function updateCards(updatedCards, cardsToUpdate) {
+  for (let card of cardsToUpdate) {
+    updatedCards[card.id].selected = card.status.selected;
+    updatedCards[card.id].inactive = card.status.inactive;
+  }
+  return updatedCards;
+}
+/**
+ * update active card totals in the cardCounts state with passed value
+ * @param {{}} cardCounts - copy of state cardCounts object
+ * @param {int} rankNumber rank number of selected card
+ * @param {int} adjustmentValue -1 when card is selected, 1 when card is deselected
+ * @returns 
+ */
+function updateCardCounts(cardCounts, rankNumber, adjustmentValue) {
+  // update card totals in the total counts with passed value
+  cardCounts[rankNumber] += adjustmentValue;
+  return cardCounts;
+}
+
 export default function App() {
-  // used to track counts of each rankNumber of active cards
-  const [cardCounts, setCardCounts] = useState(activeCards);
-  // re-calculated when new card is selected/deselected and contains higher/lower/equal count for selected card
   const [stats, setStats] = useState({});
-  // keeps the history of selected cards (last entry is removed when a card is de-selected)
-  const [cardsSelected, setCardsSelected] = useState([]);
-  // marker to control when the updateTotals useEffect function runs
-  const [runUpdateStats, setRunUpdateStats] = useState(true);
 
-  // unselect the selected card and restore the previously selected card as the selected card
-  function deselectCard(selectedCard) {
-    // add selected card back to the total counts
-    setCardCounts((prevCardCounts) => {
-      return { ...prevCardCounts, [selectedCard.rankNumber]: prevCardCounts[selectedCard.rankNumber] + 1 };
-    });
-
-    // get the previously selected card
-    const prevSelectedCard = cardsSelected.length > 1 ? cardsSelected[cardsSelected.length - 2] : null;
-
-    // update the status of the selected cards and (if any) the previously selected card
-    setCardStatus(prevCardStatus => {
-      const newCardsStatus = { ...prevCardStatus, [selectedCard.id]: { selected: false, inactive: false } };
-      // set status to re-select and re-activate the previously selected card, if any
-      if (prevSelectedCard) {
-        newCardsStatus[prevSelectedCard.id] = { selected: true, inactive: false };
-      }
-      return newCardsStatus;
-    });
-
-    // remove the selected card from the cards selected list
-    setCardsSelected((prevCardsSelected) => prevCardsSelected.slice(0, -1));
-
-    // set the run update stats marker - stats have to run as a useEffect as the state updates in this function are asynchronous
-    setRunUpdateStats(true);
-  }
-
-  // make the card clicked on the selected card
-  function selectCard(selectedCard) {
-    // subtract selected card from the total counts
-    setCardCounts((prevCardCounts) => {
-      return { ...prevCardCounts, [selectedCard.rankNumber]: prevCardCounts[selectedCard.rankNumber] - 1 };
-    });
-
-    // update the status of the selected cards and (if any) the previously selected card
-    setCardStatus((prevCardStatus) => {
-      const newCardsStatus = { ...prevCardStatus, [selectedCard.id]: { selected: true, inactive: false } };
-      // set status to deselect and deactivate the previously selected card, if any
-      if (cardsSelected.length > 0) {
-        const lastSelected = cardsSelected[cardsSelected.length - 1];
-        newCardsStatus[lastSelected.id] = { selected: false, inactive: true };
-      }
-      return newCardsStatus;
-    });
-
-    // add the selected card to the cards selected list
-    setCardsSelected((prevCardsSelected) => [...prevCardsSelected, selectedCard]);
-
-    // set the run update stats marker - stats have to run as a useEffect as the state updates in this function are asynchronous
-    setRunUpdateStats(true);
-  }
+  const [state, dispatcher] = useReducer(cardClick, {
+    cards: cards,
+    cardCounts: activeCards,
+    selectedIds: [],
+  });
 
   // update the totals on what the probability stats are calculated
-  function updateTotals(rankNumber) {
+  function updateTotals() {
     // set stats to null to show no proabilities if no card is selected
-    if (rankNumber === null) {
+    if (state.selectedIds.length == 0) {
       return setStats(null);
     }
 
     const totals = { higher: 0, lower: 0, equal: 0 };
 
     // for each entry in the cardsCounts object, add the counts for the value to the appropriate totals object,
-    // depending on whether the entry is higher, lower or equal to the passed rank number
-    for (const [key, count] of Object.entries(cardCounts)) {
+    // depending on whether the entry is higher, lower or equal to the last selected card rank number
+    const rankNumber = state.cards[state.selectedIds.at(-1)].rankNumber;
+    for (const [key, count] of Object.entries(state.cardCounts)) {
       if (key > rankNumber) {
         totals.higher += count;
       } else if (key < rankNumber) {
@@ -113,20 +132,15 @@ export default function App() {
   }
 
   useEffect(() => {
-    // update stats - this has to run as a useEffect as the state updates in the selectCard and deselectCard functions are asynchronous
-    setRunUpdateStats(false);
-    const showStats = cardsSelected.length > 0 && cardsSelected.length < 52;
-    updateTotals(showStats ? cardsSelected[cardsSelected.length - 1].rankNumber : null);
-  }, [runUpdateStats]);
+    const showStats = state.selectedIds.length > 0 && state.selectedIds.length < 52;
+    updateTotals(showStats ? state.selectedIds.at(-1).rankNumber : null);
+  }, [state.selectedIds]);
 
   // compile an array containing a Card component for each card in the card array
   function cardsInSuit(suit) {
-    return suit.map(card => {
-      return <Card key={`${card.id}`} 
-                   cardData={cards[card.id]} 
-                   selectCard={selectCard} 
-                   deselectCard={deselectCard} />;      
-    })
+    return suit.map((card) => {
+      return <Card key={`${card.id}`} {...state.cards[card.id]} cardClick={dispatcher} />;
+    });
   }
 
   // compose cards array with outer cards-container and inner suit-container (for grid/flexbox styling)
