@@ -1,9 +1,9 @@
 import React from "react";
 
 export default function Scores(props) {
-  const cardTotals = props.stats === null ? "" : props.stats.higher + props.stats.lower;
-  const higherPercent = props.stats === null ? "" : `${((props.stats.higher / cardTotals) * 100).toFixed(2)}%`;
-  const lowerPercent = props.stats === null ? "" : `${((props.stats.lower / cardTotals) * 100).toFixed(2)}%`;
+  const cardTotals = props.stats.higher + props.stats.lower;
+  const higherPercent = cardTotals === 0 ? "" : `${((props.stats.higher / cardTotals) * 100).toFixed(2)}%`;
+  const lowerPercent = cardTotals === 0 ? "" : `${((props.stats.lower / cardTotals) * 100).toFixed(2)}%`;
   return (
     <section className="scores-container">
       <article className="scores">

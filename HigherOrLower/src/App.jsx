@@ -33,6 +33,8 @@ const selected = {selected: true, inactive: false};
 const inactive = {selected: false, inactive: true};
 const normal = {selected: false, inactive: false};
 
+const initialStats = { higher: 0, lower: 0, equal: 0 };
+
 function cardClick(state, action) {
   // console.log("state on entering cardClick: ", state);
   let updatedCards = { ...state.cards };
@@ -69,7 +71,7 @@ function cardClick(state, action) {
       return state;
   }
 
-  return { ...state, cards: updatedCards, cardCounts: updatedCardCounts, selectedIds: updatedSelectedIds };
+  return { cards: updatedCards, cardCounts: updatedCardCounts, selectedIds: updatedSelectedIds };
 }
 
 /**
@@ -99,7 +101,7 @@ function updateCardCounts(cardCounts, rankNumber, adjustmentValue) {
 }
 
 export default function App() {
-  const [stats, setStats] = useState({});
+  const [stats, setStats] = useState({ higher: 0, lower: 0, equal: 0 });
 
   const [state, dispatcher] = useReducer(cardClick, {
     cards: cards,
@@ -107,14 +109,13 @@ export default function App() {
     selectedIds: [],
   });
 
-  // update the totals on what the probability stats are calculated
+  // update the totals on which the probability stats are calculated
   function updateTotals() {
-    // set stats to null to show no proabilities if no card is selected
-    if (state.selectedIds.length == 0) {
-      return setStats(null);
-    }
+    const totals = {...initialStats};
 
-    const totals = { higher: 0, lower: 0, equal: 0 };
+    if (state.selectedIds.length == 0) {
+      return totals;
+    }
 
     // for each entry in the cardsCounts object, add the counts for the value to the appropriate totals object,
     // depending on whether the entry is higher, lower or equal to the last selected card rank number
@@ -128,12 +129,11 @@ export default function App() {
         totals.equal += count;
       }
     }
-    setStats(totals);
+    return totals;
   }
 
   useEffect(() => {
-    const showStats = state.selectedIds.length > 0 && state.selectedIds.length < 52;
-    updateTotals(showStats ? state.selectedIds.at(-1).rankNumber : null);
+    setStats(updateTotals());
   }, [state.selectedIds]);
 
   // compile an array containing a Card component for each card in the card array
