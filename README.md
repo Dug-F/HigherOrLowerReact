@@ -33,6 +33,14 @@ I therefore created a second iteration of the app which re-renders only the card
 
 You can find a link to the deployed site above or at the right-side of this page.
 
+<h2>How to use the app</h2>
+
+When a card is drawn by the game leader, click on the corresponding card shown in the app.  The card you have selected will become outlined in red.  If another card was previously selected, it will be deactivated as effectively removed from the game.  At the bottom of the screen, the probabilities of the next card being either higher or lower than the current card are shown.  Cards of the same face value are not included in the calculation, since if they are drawn then no players are eliminated and another card will be draw.
+
+If you click on a card in error, you can just click on it again and it will be deselected and the game will return to its state prior to you first clicking on the card.  You can follow this process back through as many cards in the sequence they were selected as you wish.
+
+Strategy hint: it is not necessarily the best strategy to always go for the most likely outcome, since most other players will be doing the same.  I have found it best to balance the probability of the outcome with where the majority of other players are putting their guesses.  This may give you a higher chance of being eliminated, but it potentially gives you a higher probability of winning if you are not eliminated.  Of course if everyone uses this strategy it is less effective ...
+
 <h2>What I Learned</h2>
 
 The project was a rich learning experience.
