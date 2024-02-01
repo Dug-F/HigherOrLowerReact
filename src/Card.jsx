@@ -3,7 +3,8 @@ import React from "react";
 export default React.memo(function Card(props) {
   function handleClick(event) {
     if (props.inactive) return;
-    const action = props.selected ? { type: "deselect", id: props.id } : { type: "select", id: props.id };
+    const id = props.cardsRefData.id;
+    const action = props.selected ? { type: "deselect", id: id } : { type: "select", id: id };
     props.cardClick(action);
   }
 
@@ -12,5 +13,5 @@ export default React.memo(function Card(props) {
 
   // console.log("rendering: ", props);
 
-  return <img className={`card ${inactive} ${selected}`} src={props.img} alt={props.alt} onClick={handleClick} />;
+  return <img className={`card ${inactive} ${selected}`} src={props.cardsRefData.img} alt={props.cardsRefData.alt} onClick={handleClick} />;
 });

@@ -142,7 +142,7 @@ export default function App() {
   // compile an array containing a Card component for each card in the card array
   function cardsInSuit(suit) {
     return suit.map((card) => {
-      return <Card key={`${card.id}`} {...cardsRefData[card.id]}  {...state.cardsStatus[card.id]} cardClick={dispatcher} />;
+      return <Card key={`${card.id}`} cardsRefData={cardsRefData[card.id]}  {...state.cardsStatus[card.id]} cardClick={dispatcher} />;
     });
   }
 
