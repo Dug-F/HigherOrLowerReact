@@ -24,8 +24,8 @@ I therefore created a second iteration of the app which re-renders only the card
 
 <h3>Watch a demo video</h3>
 
-<a href="https://www.youtube.com/watch?v=9HJvq3dETL8" title="Watch the video">
-    <img src="/AsyncAvatars%20thumbnail.png" alt="Watch the video" width="500"/>
+<a href="https://youtu.be/3vNU_khFKkU" title="Watch the video">
+    <img src="/public/HigherOrLowerDemoVideo.png" alt="Watch the video" width="500"/>
 </a>
 
 <br>
