@@ -126,6 +126,8 @@ Click on the link shown to invoke the app in your browser
 		- the card is greyed out
 - **the problem is that in the initial React implementation, clicking on a card invokes a re-render of the parent, which in turn re-renders all 52 cards**
 
+[Back to top](#higher-or-lower-project)
+
 ## Attempts to fix the problem
 
 ### Attempt 1: Use useMemo
