@@ -43,7 +43,7 @@ The first iteration implemented all the required functionality of the original j
 
 However, the implementation approach using useState and props flowed down to the child components meant that all 52 cards were being re-rendered when a single card was clicked on.  Whilst the performance was not too badly affected, I was unsatisfied and wanted to find a solution which had more control over the re-renders of the cards.
 
-I therefore created a second iteration of the app which re-renders only the card clicked on and the previously selected card (to disable it).  This took some figuring out, so I have included my personal notes on how this problem was solved at the end of this README in case anyone is interested [link here](#personal-notes-on-solving-how-to-re-render-only-specific-cards-when-clicked).
+I therefore created a second iteration of the app which re-renders only the card clicked on and the previously selected card (to disable it).  This took some figuring out, so I have included my personal notes on how this problem was solved at the end of this README (link [here](#personal-notes-on-solving-how-to-re-render-only-specific-cards-when-clicked)) in case anyone is interested.
 
 You can find a link to the deployed site above or at the right-side of this page.
 
@@ -51,11 +51,11 @@ You can find a link to the deployed site above or at the right-side of this page
 
 ## How To Use The App
 
-When a card is drawn by the game leader, click on the corresponding card shown in the app.  The card you have selected will become outlined in red.  If another card was previously selected, it will be deactivated as effectively removed from the game.  At the bottom of the screen, the probabilities of the next card being either higher or lower than the current card are shown.  Cards of the same face value are not included in the calculation, since if they are drawn then no players are eliminated and another card will be draw.
+When a card is drawn by the game leader, click on the corresponding card shown in the app.  The card you have selected will become outlined in red.  If another card was previously selected, it will be deactivated as it is now removed from the game.  At the bottom of the screen, the probabilities of the next card being either higher or lower than the current card are shown.  Cards of the same face value are not included in the calculation, since if they are drawn then no players are eliminated and another card will be drawn.
 
-If you click on a card in error, you can just click on it again and it will be deselected and the game will return to its state prior to you first clicking on the card.  You can follow this process back through as many cards in the sequence they were selected as you wish.
+If you click on a card in error, you can just click on it again and it will be deselected and the game will return to its state prior to you first clicking on the card.  You can follow this process back through as many cards as you with in the sequence they were selected.
 
-Strategy hint: it is not necessarily the best strategy to always go for the most likely outcome, since most other players will be doing the same.  I have found it best to balance the probability of the outcome with where the majority of other players are putting their guesses.  This may give you a higher chance of being eliminated, but it potentially gives you a higher probability of winning if you are not eliminated.  Of course if everyone uses this strategy it is less effective ...
+**Strategy hint**: it is not necessarily the best strategy to always go for the most probable outcome, since most other players will be doing the same.  I have found it best to balance the probability of the outcome with where the majority of other players are putting their guesses - in other words, vote against the crowd if the odds are not too far against you.  This may give you a higher chance of being eliminated, but it potentially gives you a higher probability of winning if you are not eliminated.  Of course if everyone uses this strategy it is less effective ...
 
 [Back to top](#higher-or-lower-project)
 
@@ -63,13 +63,13 @@ Strategy hint: it is not necessarily the best strategy to always go for the most
 
 The project was a rich learning experience.
 
-I was my first significant project using React and I therefore gained a lot of valuable practical experience in how to 'think React'.
+It was my first significant project using React and I therefore gained a lot of valuable practical experience in how to 'think React'.
 
 React considerably simplified the logic that had previously been implemented in the javascript version and made it more modular.
 
 One of the most challenging aspects was that I wanted to have a responsive app that showed 4 rows of 13 cards by suit on wider screens but 4 columns of 13 cards by suit on narrow screens.  I had solved this problem in the javascript version by hard-coding the cards in the html with the associated CSS.  React made it easier to implement this functionality in a more automated way but it required some thinking as how to best implement it.
 
-The biggest learning though was on the second iteration of the app, where I wanted to minimise re-rendering the cards when a single card was clicked on.  This required a fairly deep dive into React hooks and how props are flowed down to child objects to solve.  I gained a lot of insight into hooks that were new to me - useMemo, useRef, useCallback and useReducer.  I now have a much greater understanding of how these all work both in isolation and in combination.
+The biggest learning though was on the second iteration of the app, where I wanted to minimise re-rendering the cards when a single card was clicked.  This required a fairly deep dive into React hooks and how props are flowed down to child objects to solve.  I gained a lot of insight into hooks that were new to me - useMemo, useRef, useCallback and useReducer.  I now have a much greater understanding of how these all work both in isolation and in combination.
 
 [Back to top](#higher-or-lower-project)
 
