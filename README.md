@@ -1,4 +1,4 @@
-# Higher Or Lower Project<
+# Higher Or Lower Project
 
 ## Contents
 1. [Problem](#problem)
