@@ -19,7 +19,7 @@
 
 At the School of Code, there are energiser activities which typically take place mid-afternoon, at the poinst where energy levels may be starting to drop.
 
-One of the most popular energisers is Higher or Lower.  The instructor has a deck of cards and turns over the top card.  Bootcampers then need to guess individually whether the next card will be higher or lower.  If they guess wrong, they are eliminated.  If the next card draw has the same face value, no one is eliminated and another card is drawn.
+One of the most popular energisers is Higher or Lower.  The instructor has a deck of cards and turns over the top card.  Bootcampers then need to guess individually whether the next card will be higher or lower.  If they guess wrong, they are eliminated.  If the next card drawn has the same face value, no one is eliminated and another card is drawn.
 
 This app was created as a useful add-on to the gameplay.  It is to help bootcampers be aware of the proabilities of the next card being higher or lower than the current exposed card so as to inform their guess.
 
