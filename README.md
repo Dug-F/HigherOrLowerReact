@@ -1,7 +1,15 @@
-<h1>Higher or Lower Project</h1>
+# Higher Or Lower Project<
 
-[Problem](#problem)  
-[Tech Stack](#tech-stack)
+## Contents
+1. [Problem](#problem)
+2. [Solution](#solution)
+3. [How To Use The App](#how-to-use-the-app)
+4. [What I Learned](#what-i-learned)
+5. [Tech Stack](#tech-stack)
+6. [How To Run Locally](#how-to-run-locally)
+7. [Personal Notes On Solving How To Re-render Only Specific Cards When Clicked](#personal-notes-on-solving-how-to-re-render-only-specific-cards-when-clicked)
+	- [Attempt 1: Use useMemo](#attempt-1-use-usememo)
+
 
 ## Problem
 
@@ -11,7 +19,7 @@ One of the most popular energisers is Higher or Lower.  The instructor has a dec
 
 This app was created as a useful add-on to the gameplay.  It is to help bootcampers be aware of the proabilities of the next card being higher or lower than the current exposed card so as to inform their guess.
 
-<h2>Solution</h2>
+## Solution
 
 [Deployed here](https://higher-or-lower-react.onrender.com/)
 
@@ -35,7 +43,7 @@ I therefore created a second iteration of the app which re-renders only the card
 
 You can find a link to the deployed site above or at the right-side of this page.
 
-<h2>How to use the app</h2>
+## How To Use The App
 
 When a card is drawn by the game leader, click on the corresponding card shown in the app.  The card you have selected will become outlined in red.  If another card was previously selected, it will be deactivated as effectively removed from the game.  At the bottom of the screen, the probabilities of the next card being either higher or lower than the current card are shown.  Cards of the same face value are not included in the calculation, since if they are drawn then no players are eliminated and another card will be draw.
 
@@ -43,7 +51,7 @@ If you click on a card in error, you can just click on it again and it will be d
 
 Strategy hint: it is not necessarily the best strategy to always go for the most likely outcome, since most other players will be doing the same.  I have found it best to balance the probability of the outcome with where the majority of other players are putting their guesses.  This may give you a higher chance of being eliminated, but it potentially gives you a higher probability of winning if you are not eliminated.  Of course if everyone uses this strategy it is less effective ...
 
-<h2>What I Learned</h2>
+## What I Learned
 
 The project was a rich learning experience.
 
@@ -59,7 +67,7 @@ The biggest learning though was on the second iteration of the app, where I want
 
 React, Javascript, Vite, HTML, CSS
 
-<h2>How to run locally</h2>
+## How To Run Locally
 
 Clone the project
 
@@ -89,7 +97,9 @@ Click on the link shown to invoke the app in your browser
 
 <hr>
 
-## Personal Notes on Solving How To Re-render Only Specific Cards When Clicked
+[Back to top](#higher-or-lower-project)
+
+## Personal Notes On Solving How To Re-render Only Specific Cards When Clicked
 
 ## Problem Definition
 
@@ -284,6 +294,8 @@ Click on the link shown to invoke the app in your browser
 - note that the useMemo wrapper is still needed to memoize the child component props and prevent re-renders of the child if the props haven't changed.
 
 #### This approach works!
+
+[Back to top](#higher-or-lower-project)
 
 
   
