@@ -8,7 +8,11 @@
 5. [Tech Stack](#tech-stack)
 6. [How To Run Locally](#how-to-run-locally)
 7. [Personal Notes On Solving How To Re-render Only Specific Cards When Clicked](#personal-notes-on-solving-how-to-re-render-only-specific-cards-when-clicked)
+   	- [Problem Definition](#problem-definition)
 	- [Attempt 1: Use useMemo](#attempt-1-use-usememo)
+ 	- [Attempt 2: Pass Individual Props](#attempt-2-pass-individual-props)
+  	- [Attempt 3: Use useCallback](#attempt-3-use-usecallback)
+   	- [Attempt 4: Use useReducer](#attempt-4-use-usereducer)
 
 
 ## Problem
@@ -43,6 +47,8 @@ I therefore created a second iteration of the app which re-renders only the card
 
 You can find a link to the deployed site above or at the right-side of this page.
 
+[Back to top](#higher-or-lower-project)
+
 ## How To Use The App
 
 When a card is drawn by the game leader, click on the corresponding card shown in the app.  The card you have selected will become outlined in red.  If another card was previously selected, it will be deactivated as effectively removed from the game.  At the bottom of the screen, the probabilities of the next card being either higher or lower than the current card are shown.  Cards of the same face value are not included in the calculation, since if they are drawn then no players are eliminated and another card will be draw.
@@ -50,6 +56,8 @@ When a card is drawn by the game leader, click on the corresponding card shown i
 If you click on a card in error, you can just click on it again and it will be deselected and the game will return to its state prior to you first clicking on the card.  You can follow this process back through as many cards in the sequence they were selected as you wish.
 
 Strategy hint: it is not necessarily the best strategy to always go for the most likely outcome, since most other players will be doing the same.  I have found it best to balance the probability of the outcome with where the majority of other players are putting their guesses.  This may give you a higher chance of being eliminated, but it potentially gives you a higher probability of winning if you are not eliminated.  Of course if everyone uses this strategy it is less effective ...
+
+[Back to top](#higher-or-lower-project)
 
 ## What I Learned
 
@@ -62,6 +70,8 @@ React considerably simplified the logic that had previously been implemented in 
 One of the most challenging aspects was that I wanted to have a responsive app that showed 4 rows of 13 cards by suit on wider screens but 4 columns of 13 cards by suit on narrow screens.  I had solved this problem in the javascript version by hard-coding the cards in the html with the associated CSS.  React made it easier to implement this functionality in a more automated way but it required some thinking as how to best implement it.
 
 The biggest learning though was on the second iteration of the app, where I wanted to minimise re-rendering the cards when a single card was clicked on.  This required a fairly deep dive into React hooks and how props are flowed down to child objects to solve.  I gained a lot of insight into hooks that were new to me - useMemo, useRef, useCallback and useReducer.  I now have a much greater understanding of how these all work both in isolation and in combination.
+
+[Back to top](#higher-or-lower-project)
 
 ## Tech Stack
 
@@ -114,11 +124,7 @@ Click on the link shown to invoke the app in your browser
 	- it also changes the state on the previous card selected
 		- the red outline is removed
 		- the card is greyed out
-- **the problem is that clicking on a card invokes a re-render of the parent, which in turn is re-rendering all 52 cards**
-
-## What is causing the problem
-
-- In the initial implementation, the default React behaviour is that when a parent component re-renders, all child components also re-render
+- **the problem is that in the initial React implementation, clicking on a card invokes a re-render of the parent, which in turn re-renders all 52 cards**
 
 ## Attempts to fix the problem
 
@@ -145,6 +151,8 @@ Click on the link shown to invoke the app in your browser
 		- the state update functions are built within the parent component (since they need to access the state variables)
 		- therefore when the parent component is re-rendered the functions are rebuilt and have different references compared to the last render
 		- since the props comparison in useMemo is shallow, the function references are compared to the last render and will always be different, forcing the child to re-render
+
+[Back to top](#higher-or-lower-project)
 
 ### Attempt 2: Pass Individual Props
 
@@ -179,6 +187,8 @@ Click on the link shown to invoke the app in your browser
 - it is therefore a necessary step in solving the problem, but not sufficient
 - it does not solve the problem when state update functions are passed down
 
+[Back to top](#higher-or-lower-project)
+
 ### Attempt 3: Use useCallback
 
 #### The approach
@@ -202,6 +212,8 @@ Click on the link shown to invoke the app in your browser
 		- the callback function can now access the current state of the dependency
 		- but the callback function is rebuilt and therefore has a new reference
 			- this forces the child components to re-render even if they are using useMemo
+
+[Back to top](#higher-or-lower-project)
 
 ### Attempt 4: Use useReducer
 
