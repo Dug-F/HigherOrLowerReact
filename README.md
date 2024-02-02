@@ -1,6 +1,9 @@
 <h1>Higher or Lower Project</h1>
 
-<h2>Problem</h2>
+[Problem](#problem)  
+[Tech Stack](#jump)
+
+## Problem
 
 At the School of Code, there are energiser activities which typically take place mid-afternoon, at the poinst where energy levels may be starting to drop.
 
@@ -12,16 +15,6 @@ This app was created as a useful add-on to the gameplay.  It is to help bootcamp
 
 [Deployed here](https://higher-or-lower-react.onrender.com/)
 
-The app was originally written in vanilla javascript but was translated to React as a project to reinforce the React learning that took place on the course.  So the project served both as a learning project for React but also as a case study in how to translate an existing javascript project to React.
-
-The first iteration implemented all the required functionality of the original javascript version, plus some stretch goals - the most significant being the ability to 'deselect' cards to go backwards through the cards that had previously been selected.
-
-However, implementation approach using useState and props flowed down to the child components meant that all 52 cards were being re-rendered when a single card was clicked on.  Whilst the performance was not too badly affected, I was unsatisfied and wanted to find a solution which had more control over the re-renders of the cards.
-
-I therefore created a second iteration of the app which re-renders only the card clicked on and the previously selected card (to disable it).  This took some figuring out, so I have included my personal notes on how this problem was solved at the end of this README in case anyone is interested.
-
-<br>
-
 <h3>Watch a demo video</h3>
 
 <a href="https://youtu.be/3vNU_khFKkU" title="Watch the video">
@@ -29,7 +22,16 @@ I therefore created a second iteration of the app which re-renders only the card
 </a>
 
 <br>
+
 <br>
+
+The app was originally written in vanilla javascript but was translated to React as a project to reinforce the React learning that took place on the course.  So the project served both as a learning project for React but also as a case study in how to translate an existing javascript project to React.
+
+The first iteration implemented all the required functionality of the original javascript version, plus some stretch goals - the most significant being the ability to 'deselect' cards to go backwards through the cards that had previously been selected.
+
+However, implementation approach using useState and props flowed down to the child components meant that all 52 cards were being re-rendered when a single card was clicked on.  Whilst the performance was not too badly affected, I was unsatisfied and wanted to find a solution which had more control over the re-renders of the cards.
+
+I therefore created a second iteration of the app which re-renders only the card clicked on and the previously selected card (to disable it).  This took some figuring out, so I have included my personal notes on how this problem was solved at the end of this README in case anyone is interested.
 
 You can find a link to the deployed site above or at the right-side of this page.
 
@@ -53,8 +55,9 @@ One of the most challenging aspects was that I wanted to have a responsive app t
 
 The biggest learning though was on the second iteration of the app, where I wanted to minimise re-rendering the cards when a single card was clicked on.  This required a fairly deep dive into React hooks and how props are flowed down to child objects to solve.  I gained a lot of insight into hooks that were new to me - useMemo, useRef, useCallback and useReducer.  I now have a much greater understanding of how these all work both in isolation and in combination.
 
-<h2>Tech Stack</h2>
+## TechStack
 
+## jump
 React, Javascript, Vite, HTML, CSS
 
 <h2>How to run locally</h2>
