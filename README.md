@@ -41,7 +41,7 @@ The app was originally written in vanilla javascript but was translated to React
 
 The first iteration implemented all the required functionality of the original javascript version, plus some stretch goals - the most significant being the ability to 'deselect' cards to go backwards through the cards that had previously been selected.
 
-However, implementation approach using useState and props flowed down to the child components meant that all 52 cards were being re-rendered when a single card was clicked on.  Whilst the performance was not too badly affected, I was unsatisfied and wanted to find a solution which had more control over the re-renders of the cards.
+However, the implementation approach using useState and props flowed down to the child components meant that all 52 cards were being re-rendered when a single card was clicked on.  Whilst the performance was not too badly affected, I was unsatisfied and wanted to find a solution which had more control over the re-renders of the cards.
 
 I therefore created a second iteration of the app which re-renders only the card clicked on and the previously selected card (to disable it).  This took some figuring out, so I have included my personal notes on how this problem was solved at the end of this README in case anyone is interested.
 
