@@ -1,7 +1,7 @@
 <h1>Higher or Lower Project</h1>
 
 [Problem](#problem)  
-[Tech Stack](#jump)
+[Tech Stack](#tech-stack)
 
 ## Problem
 
@@ -55,9 +55,8 @@ One of the most challenging aspects was that I wanted to have a responsive app t
 
 The biggest learning though was on the second iteration of the app, where I wanted to minimise re-rendering the cards when a single card was clicked on.  This required a fairly deep dive into React hooks and how props are flowed down to child objects to solve.  I gained a lot of insight into hooks that were new to me - useMemo, useRef, useCallback and useReducer.  I now have a much greater understanding of how these all work both in isolation and in combination.
 
-## TechStack
+## Tech Stack
 
-## jump
 React, Javascript, Vite, HTML, CSS
 
 <h2>How to run locally</h2>
