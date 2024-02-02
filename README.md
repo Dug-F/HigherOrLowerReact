@@ -43,7 +43,7 @@ The first iteration implemented all the required functionality of the original j
 
 However, the implementation approach using useState and props flowed down to the child components meant that all 52 cards were being re-rendered when a single card was clicked on.  Whilst the performance was not too badly affected, I was unsatisfied and wanted to find a solution which had more control over the re-renders of the cards.
 
-I therefore created a second iteration of the app which re-renders only the card clicked on and the previously selected card (to disable it).  This took some figuring out, so I have included my personal notes on how this problem was solved at the end of this README in case anyone is interested.
+I therefore created a second iteration of the app which re-renders only the card clicked on and the previously selected card (to disable it).  This took some figuring out, so I have included my personal notes on how this problem was solved at the end of this README in case anyone is interested [link here](#personal-notes-on-solving-how-to-re-render-only-specific-cards-when-clicked).
 
 You can find a link to the deployed site above or at the right-side of this page.
 
